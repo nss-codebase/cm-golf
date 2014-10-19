@@ -13,14 +13,20 @@ var Game = (function(){
     this.canvas.height = bodyHeight - headerHeight;
     this.canvas.width  = window.innerWidth;
     this.assets        = Asset.load();
+    this.isOver        = true;
+    this.inHole        = false;
+    this.isOut         = false;
 
     this.listen();
   }
 
   Game.prototype.listen = function(){
     window.addEventListener('deviceorientation', function(data){
-      this.ball.x += data.gamma;
-      this.ball.y += data.beta;
+      if(this.isOver){return;}
+
+      this.ball.update(data);
+      this.inHole = this.hole.isBallInside(this.ball);
+      this.isOut = this.ball.didVanish(this);
     }.bind(this));
   };
 
@@ -28,6 +34,12 @@ var Game = (function(){
     this.clear();
     this.hole.draw(this);
     this.ball.draw(this);
+
+    if(this.inHole || this.isOut){
+      navigator.vibrate(3000);
+    }
+
+    this.isOver = this.inHole || this.isOut;
 
     if(!this.isOver){
       window.requestAnimationFrame(this.loop.bind(this));
@@ -40,8 +52,10 @@ var Game = (function(){
 
   Game.prototype.start = function(){
     this.isOver = false;
-    this.ball = new Ball();
-    this.hole = new Hole();
+    this.inHole = false;
+    this.isOut  = false;
+    this.ball = new Ball(this);
+    this.hole = new Hole(this);
     this.loop();
   };
 

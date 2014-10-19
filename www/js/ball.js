@@ -3,13 +3,29 @@
 var Ball = (function(){
   'use strict';
 
-  function Ball(){
-    this.x = 100;
-    this.y = 200;
+  function Ball(game){
+    this.width  = 30;
+    this.height = 30;
+    this.x      = _.random(0, game.canvas.width - this.width);
+    this.y      = _.random(0, game.canvas.height - this.height);
+    this.r      = this.width / 2;
   }
 
   Ball.prototype.draw = function(game){
-    game.ctx.drawImage(game.assets.ball, this.x, this.y, 50, 50);
+    if(!game.inHole && !game.isOut){
+      game.ctx.drawImage(game.assets.ball, this.x, this.y, this.width, this.height);
+    }
+  };
+
+  Ball.prototype.update = function(orientation){
+    this.x  += orientation.gamma;
+    this.y  += orientation.beta;
+    this.cX  = this.x + (this.width / 2);
+    this.cY  = this.y + (this.height / 2);
+  };
+
+  Ball.prototype.didVanish = function(game){
+    return this.x < 0;
   };
 
   return Ball;
