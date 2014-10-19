@@ -22,15 +22,14 @@ var Game = (function(){
 
   Game.prototype.listen = function(){
     window.addEventListener('deviceorientation', function(data){
-      if(this.isOver){return;}
-
       this.ball.update(data);
-      this.inHole = this.hole.isBallInside(this.ball);
-      this.isOut = this.ball.didVanish(this);
     }.bind(this));
   };
 
   Game.prototype.loop = function(timestamp){
+    this.inHole = this.hole.isBallInside(this.ball);
+    this.isOut = this.ball.didVanish(this);
+
     this.clear();
     this.hole.draw(this);
     this.ball.draw(this);
