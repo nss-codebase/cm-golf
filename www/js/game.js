@@ -13,7 +13,6 @@ var Game = (function(){
     this.canvas.height = bodyHeight - headerHeight;
     this.canvas.width  = window.innerWidth;
     this.assets        = Asset.load();
-    this.isOver        = true;
     this.inHole        = false;
     this.isOut         = false;
 
@@ -34,13 +33,13 @@ var Game = (function(){
     this.hole.draw(this);
     this.ball.draw(this);
 
-    if(this.inHole || this.isOut){
+    if(this.inHole){
+      window.dispatchEvent(new Event('gameover'));
+      this.assets.ray.play();
+    }else if(this.isOut){
+      window.dispatchEvent(new Event('gameover'));
       navigator.vibrate(3000);
-    }
-
-    this.isOver = this.inHole || this.isOut;
-
-    if(!this.isOver){
+    }else{
       window.requestAnimationFrame(this.loop.bind(this));
     }
   };
@@ -50,16 +49,11 @@ var Game = (function(){
   };
 
   Game.prototype.start = function(){
-    this.isOver = false;
     this.inHole = false;
     this.isOut  = false;
     this.ball = new Ball(this);
     this.hole = new Hole(this);
     this.loop();
-  };
-
-  Game.prototype.stop = function(){
-    this.isOver = true;
   };
 
   return Game;

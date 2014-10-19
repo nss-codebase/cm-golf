@@ -25,7 +25,12 @@ var Ball = (function(){
   };
 
   Ball.prototype.didVanish = function(game){
-    return this.x < 0;
+    var isLeft   = this.x < -this.width,
+        isRight  = this.x > game.canvas.width,
+        isTop    = this.y < -this.height,
+        isBottom = this.y > game.canvas.height;
+
+    return isLeft || isRight || isTop || isBottom;
   };
 
   return Ball;

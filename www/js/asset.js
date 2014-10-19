@@ -1,4 +1,5 @@
 /* exported Asset */
+/* global Media */
 
 var Asset = (function(){
   'use strict';
@@ -13,6 +14,8 @@ var Asset = (function(){
     asset.ball.src = 'img/ball.png';
     asset.hole = new Image();
     asset.hole.src = 'img/hole.png';
+    asset.ray  = new Media();
+    asset.ray.src  = 'audio/raygun.mp3';
 
     return asset;
   };

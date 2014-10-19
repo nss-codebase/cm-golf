@@ -18,7 +18,7 @@ html
   body(ng-app='cm-golf', ng-controller='MainCtrl')
     ion-pane
       ion-header-bar.bar-stable
-        button.button(ng-click='stop()') Stop
+        button.button.button-clear {{clock}} s
         h1.title SimGolf
         button.button(ng-click='start()') Start
       ion-content
